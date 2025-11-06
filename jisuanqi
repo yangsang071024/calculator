@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class jisuanqi {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("请输入购物商品数量：");
+        int count = sc.nextInt();
+        sc.nextLine(); 
+
+        String[] names = new String[count];    // 名称
+        double[] prices = new double[count];   // 单价
+        int[] quantities = new int[count];     // 数量
+
+        // 商品信息
+        for (int i = 0; i < count; i++) {
+            System.out.println("请输入第 " + (i + 1) + " 件商品信息：");
+            System.out.print("商品名称：");
+            names[i] = sc.nextLine();
+            System.out.print("商品单价：");
+            prices[i] = sc.nextDouble();
+            System.out.print("购买数量：");
+            quantities[i] = sc.nextInt();
+            sc.nextLine(); 
+        }
+
+        // 算总价
+        double total = calculateTotal(prices, quantities);
+        // 算折后价
+        double finalPrice = calculateDiscount(total);
+        // 清单
+        printShoppingList(names, prices, quantities, total, finalPrice);
+
+        sc.close();
+    }
+
+     // 总价
+    public static double calculateTotal(double[] prices, int[] quantities) {
+        double sum = 0;
+        for (int i = 0; i < prices.length; i++) {
+            sum += prices[i] * quantities[i];
+        }
+        return sum;
+    }
+
+     // 折后价
+    public static double calculateDiscount(double total) {
+        if (total >= 500) {
+            return total * 0.8; 
+        } else if (total >= 300) {
+            return total * 0.9; 
+        } else if (total >= 100) {
+            return total - 20; 
+        } else {
+            return total; // 没优惠
+        }
+    }
+
+    public static void printShoppingList(String[] names, double[] prices, int[] quantities, double total, double finalPrice) {
+        System.out.println("\n========== 购物小票 ==========");
+        System.out.printf("%-10s\t%-6s\t%-6s\t%-6s\n", "商品名称", "单价", "数量", "小计");
+        System.out.println("--------------------------------------");
+        for (int i = 0; i < names.length; i++) {
+            double subtotal = prices[i] * quantities[i];
+            System.out.printf("%-10s\t%-6.2f\t%-6d\t%-6.2f\n", names[i], prices[i], quantities[i], subtotal);
+        }
+        System.out.println("--------------------------------------");
+        System.out.printf("原价总计：%.2f 元\n", total);
+        System.out.printf("折后总计：%.2f 元\n", finalPrice);
+        System.out.println("======================================");
+    }
+}
